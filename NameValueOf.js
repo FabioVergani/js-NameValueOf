@@ -6,19 +6,18 @@ const RawArray=function(){return setProto([],null);};
 //
 const KeysOf=Object.keys;
 //--------------------------------------------------------------------------------
-function NameValueOf(obj,k){
- const o=obj,m=KeysOf(o),l=m.length,r=RawArray(),dict=RawObject;
+function NameValueOf(obj,handler,sorter){
+ const o=obj, f=handler||function(a,b){let o={};o[a]={skip:false,configurable:false,value:b};return o;}, k=KeysOf(o), l=k.length, m=RawArray(), dict=RawObject;
  let e,p,v,i=0;
- if(k!==false){m.sort();};
+ if(sorter){k.sort();};
  while(i<l){;
-	e={};
-	p=m[i];
+	p=k[i];
 	v=o[p];
-	e[p]={configurable:false,value:v};
-	r[i]=dict(e);
+	e=f(p,v);
+	if(e.skip!==false){m[m.length]=dict(e);};
 	i++;
  };
- return r;
+ return m;
 };
 //
 const result=NameValueOf({a:1,b:2});
